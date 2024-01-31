@@ -1,5 +1,5 @@
 # ./main.py
-
+from openai import OpenAI
 import os
 import gradio as gr
 import autogen
