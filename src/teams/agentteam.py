@@ -11,6 +11,29 @@ config_list = autogen.config_list_from_json(
         "model": ["gpt-3.5-turbo-preview", "gpt-4-preview", "gpt-4-vision-preview", "dall-e-3"],
     },
 )
+"""llm_config = {
+        "functions": [
+            {
+                "name": "retrieve_content",
+                "description": "retrieve content for code generation and question answering.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "message": {
+                            "type": "string",
+                            "description": "Refined message which keeps the original meaning and can be used to retrieve content for a factual question answering.",
+                        }
+                    },
+                    "required": ["message"],
+                },
+            },
+        ],
+        "config_list": config_list,
+        "timeout": 60,
+        "cache_seed": 42,
+        "temperature": 0.7
+    }"""
+
 llm_config = {
          "timeout": 60,
          "cache_seed": 42,
@@ -39,14 +62,15 @@ def codingteam():
 
 def covid19team():
     #_reset_agents()
-    team = autogen.GroupChat(
-        agents=[ag.scitonic, ag.covid19_scientist, ag.healthcare_expert, ag.finance_analyst],
+    groupchat = autogen.GroupChat(
+        agents=[ag.scitonic(), ag.covid19_scientist(), ag.healthcare_expert(), ag.finance_analyst()],
         messages=[],
         max_round=12
     )
+    agent_scitonic=ag.scitonic()
 
-    manager = autogen.GroupChatManager(groupchat=team, llm_config=llm_config)
-    scitonic.initiate_chat(manager, covid19_problem=COVID19_PROBLEM, n_results=3)
+    manager = autogen.GroupChatManager(groupchat=groupchat, llm_config=llm_config)
+    agent_scitonic.initiate_chat(manager, problem="how many covid cases are there in india?", n_results=3)
 
 def financeteam():
     _reset_agents()

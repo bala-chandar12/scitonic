@@ -50,6 +50,7 @@ class MapperParser:
         for tas in matches:
             print(tas)
             return tas
+        
         """Parses the response from scimap and returns the identified team."""
         if not response or 'choices' not in response or not response['choices']:
             return "No team identified"
@@ -58,12 +59,15 @@ class MapperParser:
         
         if not assistant_message:
             return "No team identified"
+
         try:
             team_data = json.loads(assistant_message)
             for team, is_selected in team_data.get('Team', {}).items():
                 if is_selected:
                     return team
             return "No team identified"
+        except json.JSONDecodeError:
+            return "Invalid response format"
     @staticmethod
     def serialize_chat_completion(chat_completion):
         """

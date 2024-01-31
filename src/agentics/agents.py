@@ -17,11 +17,34 @@ config_list = autogen.config_list_from_json(
 )
 
 print("LLM models: ", [config_list[i]["model"] for i in range(len(config_list))])
+"""llm_config = {
+        "functions": [
+            {
+                "name": "retrieve_content",
+                "description": "retrieve content for code generation and question answering.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "message": {
+                            "type": "string",
+                            "description": "Refined message which keeps the original meaning and can be used to retrieve content for a factual question answering.",
+                        }
+                    },
+                    "required": ["message"],
+                },
+            },
+        ],
+        "config_list": config_list,
+        "timeout": 60,
+        "cache_seed": 42,
+        "temperature": 0.7
+    }
+"""
 
 llm_config = {
          "timeout": 60,
          "cache_seed": 42,
-         "config_list": config_list,
+      "config_list": config_list,
          "temperature": 0,
      }
 
@@ -58,11 +81,13 @@ class AgentsFactory:
                 "docs_path": self.db_path,
                 "chunk_token_size": 1000,
                 "model": llm_config["config_list"][0]["model"],
-                "client": chromadb.PersistentClient(path="/tmp/chromadb"),
-                "collection_name": "groupchat",
+                "client": chromadb.PersistentClient(path="C:/revival/scitonic/db"),
+                "docs_path": "src/datatonic/dataset.json",
+                "collection_name": "groupchat2",
                 "get_or_create": True,
+                
             },
-            code_execution_config=False,
+            
         )
     # Placeholder definitions for agents used in team functions
     def coder(self) : 
